@@ -5,30 +5,34 @@
 (Refer to the [original source code](https://github.com/abbbi/virtnbdbackup) first, for better understanding, get familiar with syntax and help.)
 
 ## Overwiew:
-Virtnbdbackup-docker is intended for scenarios where isn't viable for SysAdmins to provide a full python3 environment plus up-to-date dependencies (old distros); or when this is totally impossible due to system constraints (inmutable / embedded rootfs, docker oriented OSes, etc.)
+Virtnbdbackup-docker is intended for scenarios where isn't viable for SysAdmins to provide a up-to-date dependencies (stable distros); or when this is totally impossible due to system constraints (inmutable / embedded rootfs, docker oriented OSes, etc.)
 
-This image includes 'virtnbdbackup' and 'virtnbdrestore' utils installed, along with required dependecies, and currently is being built from `debian:bullseye-slim` as base.
+This image includes 'virtnbdbackup' and 'virtnbdrestore' utils installed along with required dependecies, and currently is being built from `debian:bullseye-slim` as base.
 
-By now, it has been successfully ested on UnRaid, and should work the same on many other distros as much as below requirements can be accomplished.
+It has been successfully tested on UnRaid v6.9.2, but should work the same on many other distros, as much as below requirements can be accomplished.
 
 ## Requirements:
 - Docker Engine. See [Docker Documentation](https://docs.docker.com/get-docker/) for further instructions
-- libvirt >=6.0.0 (Qemu version seems to be not important, since this image carries 'qemu-utils' for internal processing.)
-- To have performed the punctual modifications on VM's XML file as pointed in [source code's README](https://github.com/abbbi/virtnbdbackup), so this tool will work for you.
+- libvirt >=6.0.0
+- To have performed the punctual modifications on VM's XML file and image format, as pointed at [source code's README](https://github.com/abbbi/virtnbdbackup), so this tool will work for you.
 
-## The key it's to determine correct bind mounts:
+Note: This image carries latest 'qemu-utils' as of its base OS for internal processing of images during restoration.
+
+## Bind mounts:
 
 - Virtnbdbackup needs to access libvirt's socket in order to work correctly, and attempts this via `/var/run/libvirt` path.
 
-  Basically in all mainstream distros of nowadays (Debian, RedHat, Archlinux and the countless distros based on these) `/var/run` is a symlink to `/run` and `/var/lock` a symlink to `run/lock`, so the correct bind mount in vast majority of scenarios should be: `-v /run:/run`.
+  In basically all mainstream distros of today (Debian, RedHat, Archlinux and the countless distros based on these) as in this image, `/var/run` is a symlink to `/run` and `/var/lock` a symlink to `run/lock`.
+  For the vast majority of scenarios the correct bind mount is: `-v /run:/run`
 
-  But in certain cases (such as UnRaid) `/run` and `/var/run` are different folders. In this scenario you need to bind mount with `-v /var/run:/run`, and sometimes also with `-v /var/lock:/run/lock`) in order to run this container correctly.
+  But in certain cases (e.g. UnRaid) `/run` and `/var/run` are different folders. Under this scenario you need to bind mount with `-v /var/run:/run`
+  And most likely, also with either `-v /var/lock:/run/lock` or `-v /var/run/lock:/run/lock` in order to run this container correctly.
 
-  If none of this work for you, *read source FAQ* create a persistent contiainer as described below, in order to debug the behaviour from inside and get the correct bind mounts that work for your main host.
+  If you're in trouble with this, *read source FAQ* and create a persistent contiainer as described below in order to debug the behaviour from inside, and get the correct bind mounts that work for your main host (And feel free to contribute by sharing your experience / commit about such distros.)
 
-- Virtnbdbackup creates sockets for backup/restoration tasks at /var/tmp. Ensure to mimic this with `-v /var/tmp:/var/tmp` always
+- Virtnbdbackup and virtnbdrestore create sockets for backup/restoration jobs tasks at /var/tmp. Ensure to always add a bind mount with `-v /var/tmp:/var/tmp`
 
-- Finally, for clearness with all the commands you will input, it's convenient to mimic backup and restoration bind mounts at both endpoints, such as `-v /mnt/backups:/mnt/backups` and so on (for virtnbdrestore, most likely you will need two bind mounts, one for backups location, and another for the path where VM will be restored)
+- Finally, to warrant clearness with all input commands, it's convenient to use same backup (and restoration) bind mounts at both endpoints, such as `-v /mnt/backups:/mnt/backups` in order to parse commands in same way as you were running it natively on your main host.
 
 ## Usage Examples:
 
@@ -68,10 +72,10 @@ By now, it has been successfully ested on UnRaid, and should work the same on ma
 `virtnbdrestore -i /mnt/-backups/<domain-backup> -a restore -o /mnt/restored`
 
 
-Where `/mnt/restored` is just an example of folder in your system where virtnbdrestore will rebuild virtual disk(s) present on backups, since will create images with names corresponding with its internal block device name, such as 'hdc'.
+Where `/mnt/restored` is an example folder in your system, where virtnbdrestore will rebuild virtual disk(s) based on existing backups, with its internal block device name, such as 'sda', 'vda', 'hdc', etc.
 
 ### Persistent container:
-In above examples, container will be removed as soon the invoked command has been executed. This is the optimal behaviour when you intend to automatize operations (such as incremental backups.)
+In above examples, the container will be removed as soon the invoked command has been executed. This is the optimal behaviour when you intend to automatize operations (such as incremental backups.)
 
 In addition, you can set a persistent container with all necessary bind mounts with:
 
@@ -83,10 +87,13 @@ In addition, you can set a persistent container with all necessary bind mounts w
 
 `/bin/bash`
 
-And attach to its Shell with: `docker start -i <container-name>` to perform manual backups/restorations, or for debugging purposes.
+And attach to its Shell with: `docker start -i <container-name>` to perform manual backups/restorations, or for debugging purposes. Exiting the Shell will stop it immediately.
 
 ## Quick Notes for SysAdmins:
 
-- Modifications on VM's XML files while these are running, require to restart the domain.
-- Backups will be executed on running domains only.
-- Restoration is independent of domain's state (it can be running or not) but domain restoration -if needed- has to be done by hand, such as stopping the domain and renaming /replacing image files on its final location.
+- Modifications on VM's XML files while these are running, requires to restart such domain(s).
+- Backup jobs will be executed on running domains only.
+- Restoration is independent of domain's state (it can be running or not) but restoration -when needed- has to be done by hand, such as:
+  - Stopping the domain
+  - Renaming / replacing image files on its final location
+  - Starting the domain
