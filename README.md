@@ -45,7 +45,7 @@ Note: This image carries latest 'qemu-utils' as of its base OS for internal proc
 
 `docker-virtnbdbackup \`
 
-`virtnbdbackup -d <domain-name> -l full -o /mnt/-backups/<domain-name>`
+`virtnbdbackup -d <domain-name> -l full -o /mnt/backups/<domain-name>`
 
 
 ### Incremental Backup:
@@ -57,7 +57,7 @@ Note: This image carries latest 'qemu-utils' as of its base OS for internal proc
 
 `docker-virtnbdbackup \`
 
-`virtnbdbackup -d <domain-name> -l inc -o /mnt/-backups/<domain-name>`
+`virtnbdbackup -d <domain-name> -l inc -o /mnt/backups/<domain-name>`
 
 
 ### Restoration of Backup:
