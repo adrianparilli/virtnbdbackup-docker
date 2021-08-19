@@ -28,11 +28,11 @@ Note: This image carries latest 'qemu-utils' as of its base OS for internal proc
   But in certain cases (e.g. UnRaid) `/run` and `/var/run` are different folders. Under this scenario you need to bind mount with `-v /var/run:/run`
   And most likely, also with either `-v /var/lock:/run/lock` or `-v /var/run/lock:/run/lock` in order to run this container correctly.
 
-  If you're in trouble with this, *read source FAQ* and create a persistent contiainer as described below in order to debug the behaviour from inside, and get the correct bind mounts that work for your main host (And feel free to contribute by sharing your experience / commit about such distros.)
+  If you're in trouble with this, *read source FAQ* and create a persistent container (as described below) in order to debug, and get the correct bind mounts that work for your main host (you're encouraged to commit to improve this image.)
 
-- Virtnbdbackup and virtnbdrestore create sockets for backup/restoration jobs tasks at /var/tmp. Ensure to always add a bind mount with `-v /var/tmp:/var/tmp`
+- Virtnbdbackup and virtnbdrestore create sockets for backup/restoration jobs tasks at `/var/tmp`. Ensure to always add a bind mount with `-v /var/tmp:/var/tmp`
 
-- Finally, to warrant clearness with all input commands, it's convenient to use same backup (and restoration) bind mounts at both endpoints, such as `-v /mnt/backups:/mnt/backups` in order to parse commands in same way as you were running it natively on your main host.
+- Finally, to warrant clearness with all input commands, it's convenient to use same paths for backup (and restoration) bind mounts at both endpoints, such as `-v /mnt/backups:/mnt/backups` in order to parse commands in same way as you were running it natively on your main host.
 
 ## Usage Examples:
 
@@ -75,7 +75,7 @@ Note: This image carries latest 'qemu-utils' as of its base OS for internal proc
 Where `/mnt/restored` is an example folder in your system, where virtnbdrestore will rebuild virtual disk(s) based on existing backups, with its internal block device name, such as 'sda', 'vda', 'hdc', etc.
 
 ### Persistent container:
-In above examples, the container will be removed as soon the invoked command has been executed. This is the optimal behaviour when you intend to automatize operations (such as incremental backups.)
+In the above examples, the container will be removed as soon the invoked command has been executed. This is the optimal behaviour when you intend to automatize operations (such as incremental backups.)
 
 In addition, you can set a persistent container with all necessary bind mounts with:
 
@@ -87,13 +87,13 @@ In addition, you can set a persistent container with all necessary bind mounts w
 
 `/bin/bash`
 
-And attach to its Shell with: `docker start -i <container-name>` to perform manual backups/restorations, or for debugging purposes. Exiting the Shell will stop it immediately.
+And attach to its Shell with: `docker start -i <container-name>` to perform manual backups/restorations or for debugging purposes. Exiting the Shell will stop it immediately.
 
 ## Quick Notes for SysAdmins:
 
-- Modifications on VM's XML files while these are running, requires to restart such domain(s).
+- Modifications on VM's XML files while domains are running, requires to restart such domains.
 - Backup jobs will be executed on running domains only.
-- Restoration is independent of domain's state (it can be running or not) but restoration -when needed- has to be done by hand, such as:
+- Restoration jobs are independent of domain's state (it can be running or not) but actual restoration of domain has to be done by hand, by:
   - Stopping the domain
   - Renaming / replacing image files on its final location
   - Starting the domain
