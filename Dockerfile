@@ -6,7 +6,7 @@ LABEL container.name="virtnbdbackup-docker"
 LABEL container.source.description="Backup utiliy for Libvirt kvm / qemu with Incremental backup support via NBD"
 LABEL container.description="virtnbdbackup and virtnbdrestore (plus depedencies) to run on hosts with libvirt >= 6.0.0"
 LABEL container.source=$source
-LABEL container.version="0.22"
+LABEL container.version="1.0"
 LABEL maintainer="Adrián Parilli <a.parilli@staffwerke.de>"
 
 # Deploys dependencies and pulls sources, installing virtnbdbackup and removing unnecessary content:
