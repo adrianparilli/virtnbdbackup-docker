@@ -92,7 +92,6 @@ And attach to its Shell with: `docker start -i <container-name>` to perform manu
 ## Quick Notes for SysAdmins:
 
 - Modifications on VM's XML files while domains are running, requires to restart such domains.
-- Backup jobs will be executed on running domains only.
 - Restoration jobs are independent of domain's state (it can be running or not) but actual restoration of domain has to be done by hand, by:
   - Stopping the domain
   - Renaming / replacing image files on its final location
