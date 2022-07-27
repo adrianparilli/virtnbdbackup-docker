@@ -13,7 +13,7 @@ LABEL maintainer="Adrián Parilli <a.parilli@staffwerke.de>"
 RUN \
 apt-get update && \
 apt-get install -y --no-install-recommends \
-ca-certificates git python3-all python3-libnbd python3-libvirt python3-lz4 python3-setuptools python3-tqdm qemu-utils python3-lxml && \
+ca-certificates git python3-all python3-libnbd python3-libvirt python3-lz4 python3-setuptools python3-tqdm qemu-utils python3-lxml python3-paramiko && \
 git clone $source.git && \
 cd virtnbdbackup && python3 setup.py install && cd .. && \
 apt-get purge -y git ca-certificates && apt-get -y autoremove --purge && apt-get clean && \
