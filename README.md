@@ -14,7 +14,7 @@ It has been successfully tested on UnRaid v6.9.2, but should work the same on ma
 ## Requirements:
 - Docker Engine. See [Docker Documentation](https://docs.docker.com/get-docker/) for further instructions
 - libvirt >=6.0.0
-- To have performed the punctual modifications on VM's XML file and image format, as pointed at [source code's README](https://github.com/abbbi/virtnbdbackup), so this tool will work for you.
+- To have performed the punctual modifications on VM's XML file and image format, as pointed at source code [README](https://github.com/abbbi/virtnbdbackup/blob/master/README.md), so this tool will work for you.
 
 Note: This image carries latest 'qemu-utils' as of its base OS for internal processing of images during restoration.
 
@@ -69,7 +69,7 @@ Note: This image carries latest 'qemu-utils' as of its base OS for internal proc
 
 `docker-virtnbdbackup \`
 
-`virtnbdrestore -i /mnt/-backups/<domain-backup> -a restore -o /mnt/restored`
+`virtnbdrestore -i /mnt/backups/<domain-backup> -a restore -o /mnt/restored`
 
 
 Where `/mnt/restored` is an example folder in your system, where virtnbdrestore will rebuild virtual disk(s) based on existing backups, with its internal block device name, such as 'sda', 'vda', 'hdc', etc.
@@ -88,6 +88,8 @@ In addition, you can set a persistent container with all necessary bind mounts w
 `/bin/bash`
 
 And attach to its Shell with: `docker start -i <container-name>` to perform manual backups/restorations or for debugging purposes. Exiting the Shell will stop it immediately.
+
+For more usage examples (including latest features) refer to source code [README](https://github.com/abbbi/virtnbdbackup/blob/master/README.md)
 
 ## Quick Notes for SysAdmins:
 
