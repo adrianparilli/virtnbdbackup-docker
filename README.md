@@ -43,7 +43,7 @@ Note: This image carries latest 'qemu-utils' as of its base OS for internal proc
 
 `-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups \`
 
-`docker-virtnbdbackup \`
+`adrianparilli/virtnbdbackup-docker \`
 
 `virtnbdbackup -d <domain-name> -l full -o /mnt/backups/<domain-name>`
 
@@ -55,7 +55,7 @@ Note: This image carries latest 'qemu-utils' as of its base OS for internal proc
 
 `-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups \`
 
-`docker-virtnbdbackup \`
+`adrianparilli/virtnbdbackup-docker \`
 
 `virtnbdbackup -d <domain-name> -l inc -o /mnt/backups/<domain-name>`
 
@@ -67,7 +67,7 @@ Note: This image carries latest 'qemu-utils' as of its base OS for internal proc
 
 `-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored \`
 
-`docker-virtnbdbackup \`
+`adrianparilli/virtnbdbackup-docker \`
 
 `virtnbdrestore -i /mnt/backups/<domain-backup> -a restore -o /mnt/restored`
 
@@ -79,11 +79,11 @@ In the above examples, the container will be removed as soon the invoked command
 
 In addition, you can set a persistent container with all necessary bind mounts with:
 
-`docker create --name <container-name>`
+`docker create --name <container-name> \`
 
 `-v /var/tmp:/var/tmp -v /run:/run -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored' \`
 
-`docker-virtnbdbackup \`
+`adrianparilli/virtnbdbackup-docker \`
 
 `/bin/bash`
 
