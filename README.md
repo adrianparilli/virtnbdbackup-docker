@@ -74,10 +74,25 @@ Note: This image carries latest 'qemu-utils' as of its base OS for internal proc
 
 Where `/mnt/restored` is an example folder in your system, where virtnbdrestore will rebuild virtual disk(s) based on existing backups, with its internal block device name, such as 'sda', 'vda', 'hdc', etc.
 
-### Persistent container:
-In the above examples, the container will be removed as soon the invoked command has been executed. This is the optimal behaviour when you intend to automatize operations (such as incremental backups.)
+### Interactive mode / debugging virtnbdbackup:
 
-In addition, you can set a persistent container with all necessary bind mounts with:
+You can also run the container in interactive mode by running its build in shell, and then execute multiple backup/restoration commands, as needed. This also very is useful for debugging purposes:
+
+
+`docker run -rm -it \`
+
+`-v /var/tmp:/var/tmp -v /run:/run -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored' \`
+
+`adrianparilli/virtnbdbackup-docker \`
+
+`/bin/bash`
+
+
+and execute commands as desired. The container will keep running until you type `exit` on the internal shell.
+
+### Persistent container:
+In the above examples, the container will be removed as soon the invoked command has been executed. This is the optimal behaviour when you intend to automatize operations,  such as incremental backups. In addition, you can set a persistent container with all necessary bind mounts with:
+
 
 `docker create --name <container-name> \`
 
@@ -87,7 +102,14 @@ In addition, you can set a persistent container with all necessary bind mounts w
 
 `/bin/bash`
 
-And attach to its Shell with: `docker start -i <container-name>` to perform manual backups/restorations or for debugging purposes. Exiting the Shell will stop it immediately.
+
+Just creating a new container (with custom name) with mount points set and ready to run in interactive mode. To start it and automatically enter into the internal shell, just type:
+
+
+`docker start -i <container-name>`
+
+
+And again, stopping it with the command `exit` from its shell.
 
 For more usage examples (including latest features) refer to source code [README](https://github.com/abbbi/virtnbdbackup/blob/master/README.md)
 
@@ -98,3 +120,4 @@ For more usage examples (including latest features) refer to source code [README
   - Stopping the domain
   - Renaming / replacing image files on its final location
   - Starting the domain
+- Newest versions of virtnbdbackup don't require to start a domain each time you need to perform an incremental backup, but this is still required in order to create a new backup chain.
