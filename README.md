@@ -5,15 +5,17 @@
 ## Overwiew
 Virtnbdbackup-docker is intended for scenarios where isn't viable to provide the necessary environment, such as dependencies or tools, due to system limitations; such as an old OS version, inmutable or embedded rootfs, live distros, docker oriented OSes, etc.
 
-For production usage on servers or hosts without these mentioned limitations, it's much better to deploy directly, via your package manager or directly downloading/installing the latest version of its [source code](https://github.com/abbbi/virtnbdbackup)
-
-It was originally made to be used on UnRaid (tested since v6.9.2), but should work equally fine on any other GNN/Linux distro, as much as below requirements can be accomplished.
-
-This image includes 'virtnbdbackup' and 'virtnbdrestore' utils installed along with their required dependecies and other utilities such as latest Qemu Utils and OpenSSH Client in order to leverage all available features.
+This was originally made to be used on UnRaid (tested since v6.9.2), but should work equally fine on any other GNN/Linux distro, as much as below requirements can be accomplished. Includes 'virtnbdbackup' and 'virtnbdrestore' utils installed along with their required dependecies and other utilities such as latest Qemu Utils and OpenSSH Client in order to leverage all available features.
 
 Currently, is being built from `debian:bookworm-slim` as base OS.
 
-Refer to the [source code](https://github.com/abbbi/virtnbdbackup) for better understanding, and get familiar with syntax, help and troubleshooting.
+For production usage on servers without the above mentioned limitations, is highly recommended to install the software directly in your OS environment, either via your package manager or installing the latest version, always available from the original [source code](https://github.com/abbbi/virtnbdbackup).
+
+Consult it for better understanding, get familiar with syntax, help and troubleshooting.
+
+Pull requests made in this repository in order to improve it, fix mistakes in documentation, updates, etc. are welcome.
+
+Under issues or bugs found with backup/restore tools that aren't related with the container's environment, please adress the [original author](https://github.com/abbbi).
 
 ## Requirements
 - Docker Engine on the host server. See [Docker Documentation](https://docs.docker.com/get-docker/) for further instructions
@@ -125,6 +127,3 @@ And again, stopping it with the command `exit` from its shell.
   - Renaming / replacing image files on its final location
   - Starting the domain
   Files as persistent NVRAMs are automatically restored
-- Ensure to read and understand documentation regarding virtnbdbackup completely
-
-Any pull request to improve this work is more than welcome!
