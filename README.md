@@ -5,17 +5,17 @@
 ## Overwiew
 Virtnbdbackup-docker is intended for scenarios where isn't viable to provide the necessary environment, such as dependencies or tools, due to system limitations; such as an old OS version, inmutable or embedded rootfs, live distros, docker oriented OSes, etc.
 
-This was originally made to be used on UnRaid (tested since v6.9.2), but should work equally fine on any other GNN/Linux distro, as much as below requirements can be accomplished. Includes 'virtnbdbackup' and 'virtnbdrestore' utils installed along with their required dependecies and other utilities such as latest Qemu Utils and OpenSSH Client in order to leverage all available features.
+This image was originally made to be used on UnRaid (tested since v6.9.2), but should work equally fine on any other GNN/Linux distro, as much as [requirements](#requirements) are accomplished.
+
+It includes 'virtnbdbackup' and 'virtnbdrestore' utils installed along with their required dependecies, and other utilities such as latest Qemu Utils and OpenSSH Client in order to leverage all available features.
 
 Currently, is being built from `debian:bookworm-slim` as base OS.
 
-For production usage on servers without the above mentioned limitations, is highly recommended to install the software directly in your OS environment, either via your package manager or installing the latest version, always available from the original [source code](https://github.com/abbbi/virtnbdbackup).
+For production usage on servers without the above mentioned limitations, is highly recommended to [install the software directly in your OS environment,](https://github.com/abbbi/virtnbdbackup#installation) either via your package manager or downloading the [latest release.](https://github.com/abbbi/virtnbdbackup/releases)
 
-Consult it for better understanding, get familiar with syntax, help and troubleshooting.
+Consult the original [source code](https://github.com/abbbi/virtnbdbackup) for better understanding, get familiar with syntax, help and troubleshooting. Issues or bugs found with backup/restore tools that aren't related with this docker image environment (as well congratulations for such great work ^_^) must be addressed to the original author, [Michael Ablassmeier](https://github.com/abbbi)
 
-Pull requests made in this repository in order to improve it, fix mistakes in documentation, updates, etc. are welcome.
-
-Under issues or bugs found with backup/restore tools that aren't related with the container's environment, please adress the [original author](https://github.com/abbbi).
+Any other issue and/or pull request made to improve this image, keep it updated, or notify  mistakes or inconsistencies in documentation, will be happily welcomed!
 
 ## Requirements
 - Docker Engine on the host server. See [Docker Documentation](https://docs.docker.com/get-docker/) for further instructions
@@ -103,7 +103,7 @@ And again, stopping it with the command `exit` from its shell.
 
 ## Quick Notes for SysAdmins
 
-- When libvirt <= 7.6.0, modifications on VM's XML files to enable incremental backup capability can be made while domains are running, but requires to restart such domains for changes take effect.
+- When libvirt <= 7.6.0, modifications on VM's XML files to enable incremental backup capability can be made while domains are running, but requires to restart such domains for changes to take effect.
 - Only a 'full' backup chain operation requires to start the domain in advance. All other operations (copy, diff, inc) doesn't need the domain running.
 - Both 'full and 'inc' checkpoints created while domain is running are stored in memory, but only saved to qcow images as bitmaps when domain is shut down. Under OS or libvirt failing scenarios (e.g. power drops, system crashes, etc.) non-saved checkpoints are lost, resulting into broken backup chains that can't receive more incremental checkpoints. This is due to Qemus Bitmap Persistence's way of working and more details can be found [here.](https://qemu-project.gitlab.io/qemu/interop/bitmaps.html#id17) Involved backups can be normally restored, though.
 - Restoration task is independent of domain's state, but actual domain restoring has to be done by hand, by:
