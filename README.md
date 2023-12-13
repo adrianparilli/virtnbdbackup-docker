@@ -5,15 +5,17 @@
 ## Overwiew
 Virtnbdbackup-docker is intended for scenarios where isn't viable to provide the necessary environment, such as dependencies or tools, due to system limitations; such as an old OS version, inmutable or embedded rootfs, live distros, docker oriented OSes, etc.
 
-This image was originally made to be used on UnRaid (tested since v6.9.2), but should work equally fine on any other GNN/Linux distro, as much as [requirements](#requirements) are accomplished.
+This image was originally made to be used on UnRaid (tested since v6.9.2), but should work equally fine on any other GNN/Linux distro, as much as some [requirements](#requirements) are accomplished.
 
 It includes 'virtnbdbackup' and 'virtnbdrestore' utils installed along with their required dependecies, and other utilities such as latest Qemu Utils and OpenSSH Client in order to leverage all available features.
 
 Currently, is being built from `debian:bookworm-slim` as base OS.
 
-For production usage on servers without the above mentioned limitations, is highly recommended to [install the software directly in your OS environment,](https://github.com/abbbi/virtnbdbackup#installation) either via your package manager or downloading the [latest release.](https://github.com/abbbi/virtnbdbackup/releases)
+For production usage on 'normal' servers without the above mentioned limitations, is highly recommended to [install the software directly in your OS environment,](https://github.com/abbbi/virtnbdbackup#installation) either via your package manager or downloading the [latest release](https://github.com/abbbi/virtnbdbackup/releases).
 
-Consult the original [source code](https://github.com/abbbi/virtnbdbackup) for better understanding, get familiar with syntax, help and troubleshooting. Issues or bugs found with backup/restore tools that aren't related with this docker image environment (as well congratulations for such great work ^_^) must be addressed to the original author, [Michael Ablassmeier](https://github.com/abbbi)
+Refer to the original [source code](https://github.com/abbbi/virtnbdbackup) for better understanding, get familiar with syntax, help and troubleshooting.
+
+Issues or bugs found with backup/restore tools that aren't related with this docker image environment (as well congratulations for such great work ^_^) must be addressed to the original author, [Michael Ablassmeier](https://github.com/abbbi).
 
 Any other issue and/or pull request made to improve this image, keep it updated, or notify  mistakes or inconsistencies in documentation, will be happily welcomed!
 
@@ -32,7 +34,7 @@ Any other issue and/or pull request made to improve this image, keep it updated,
   But in some operating systems, `/run` and `/var/run` are still separated folders. Under this scenario you need to bind mount with `-v /var/run:/run`
   And most likely, you will need to mount with either `-v /var/lock:/run/lock` or `-v /var/run/lock:/run/lock` in order to run this container correctly.
 
-  If you're in trouble with this, read source [FAQ](https://github.com/abbbi/virtnbdbackup#faq) and create a [persistent container](#persistent-container) in order to debug, and get the correct bind mounts that work for your main host.
+  If you're in trouble with this, read [Virtnbdbackup's FAQ](https://github.com/abbbi/virtnbdbackup#faq) and create a [persistent container](#persistent-container) in order to debug, and get the correct bind mounts that work for your main host.
 
 - Virtnbdbackup and virtnbdrestore create sockets for backup/restoration jobs tasks at `/var/tmp`. Ensure to always add a bind mount with `-v /var/tmp:/var/tmp`
 
@@ -61,14 +63,15 @@ virtnbdbackup -d <domain-name> -l inc -o /mnt/backups/<domain-name>
 
 ```
 docker run --rm \`
--v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored -v /etc/libvirt/qemu/nvram:/etc/libvirt/qemu/nvram \
+-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups \
+-v /mnt/restored:/mnt/restored -v /etc/libvirt/qemu/nvram:/etc/libvirt/qemu/nvram \
 adrianparilli/virtnbdbackup-docker \
 virtnbdrestore -i /mnt/backups/<domain-backup> -a restore -o /mnt/restored
 ```
 
 Where `/mnt/restored` is an example folder in your system, where virtnbdrestore will rebuild virtual disk(s) based on existing backups, with its internal block device name, such as 'sda', 'vda', 'hdc', etc.
 
-Mount point `/etc/libvirt/qemu/nvram` is required when involved backup includes NVRAM disks (e.g. UEFI Operating Systems), since virtnbdresore will attempt to restore it to its original location.
+Mount point `/etc/libvirt/qemu/nvram` is required when involved backup includes NVRAM disks (e.g. UEFI Operating Systems, as Wndows 10+), since the command will attempt to restore it to its original location.
 
 ### Interactive mode / debugging virtnbdbackup
 
