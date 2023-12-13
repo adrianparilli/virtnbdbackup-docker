@@ -30,7 +30,7 @@ Refer to the [source code](https://github.com/abbbi/virtnbdbackup) for better un
   But in some operating systems, `/run` and `/var/run` are still separated folders. Under this scenario you need to bind mount with `-v /var/run:/run`
   And most likely, you will need to mount with either `-v /var/lock:/run/lock` or `-v /var/run/lock:/run/lock` in order to run this container correctly.
 
-  If you're in trouble with this, read source [FAQ](https://github.com/abbbi/virtnbdbackup#faq) and create a [persistent container](###persistent-container) in order to debug, and get the correct bind mounts that work for your main host.
+  If you're in trouble with this, read source [FAQ](https://github.com/abbbi/virtnbdbackup#faq) and create a [persistent container](#persistent-container) in order to debug, and get the correct bind mounts that work for your main host.
 
 - Virtnbdbackup and virtnbdrestore create sockets for backup/restoration jobs tasks at `/var/tmp`. Ensure to always add a bind mount with `-v /var/tmp:/var/tmp`
 
