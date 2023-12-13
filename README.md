@@ -42,39 +42,29 @@ Under issues or bugs found with backup/restore tools that aren't related with th
 
 ### Full Backup
 
-
-`docker run --rm \`
-
-`-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups \`
-
-`adrianparilli/virtnbdbackup-docker \`
-
-`virtnbdbackup -d <domain-name> -l full -o /mnt/backups/<domain-name>`
-
-
+```
+docker run --rm \
+-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups \
+adrianparilli/virtnbdbackup-docker \
+virtnbdbackup -d <domain-name> -l full -o /mnt/backups/<domain-name>
+```
 ### Incremental Backup
 
-
-`docker run --rm \`
-
-`-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups \`
-
-`adrianparilli/virtnbdbackup-docker \`
-
-`virtnbdbackup -d <domain-name> -l inc -o /mnt/backups/<domain-name>`
-
+```
+docker run --rm \
+-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups \
+adrianparilli/virtnbdbackup-docker \
+virtnbdbackup -d <domain-name> -l inc -o /mnt/backups/<domain-name>
+```
 
 ### Backup Restoration
 
-
-`docker run --rm \`
-
-`-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored -v /etc/libvirt/qemu/nvram:/etc/libvirt/qemu/nvram \`
-
-`adrianparilli/virtnbdbackup-docker \`
-
-`virtnbdrestore -i /mnt/backups/<domain-backup> -a restore -o /mnt/restored`
-
+```
+docker run --rm \`
+-v /run:/run -v /var/tmp:/var/tmp -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored -v /etc/libvirt/qemu/nvram:/etc/libvirt/qemu/nvram \
+adrianparilli/virtnbdbackup-docker \
+virtnbdrestore -i /mnt/backups/<domain-backup> -a restore -o /mnt/restored
+```
 
 Where `/mnt/restored` is an example folder in your system, where virtnbdrestore will rebuild virtual disk(s) based on existing backups, with its internal block device name, such as 'sda', 'vda', 'hdc', etc.
 
@@ -84,36 +74,30 @@ Mount point `/etc/libvirt/qemu/nvram` is required when involved backup includes 
 
 You can also run the container in interactive mode by running its build in shell, and then execute multiple backup/restoration commands, as needed. This also very is useful for debugging purposes:
 
-
-`docker run -rm -it \`
-
-`-v /var/tmp:/var/tmp -v /run:/run -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored' \`
-
-`adrianparilli/virtnbdbackup-docker \`
-
-`/bin/bash`
-
+```
+docker run -rm -it \
+-v /var/tmp:/var/tmp -v /run:/run -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored \
+adrianparilli/virtnbdbackup-docker \
+/bin/bash
+```
 
 and execute commands as desired. The container will keep running until you type `exit` on the internal shell.
 
 ### Persistent container
 In the above examples, the container will be removed as soon the invoked command has been executed. This is the optimal behaviour when you intend to automatize operations,  such as incremental backups. In addition, you can set a persistent container with all necessary bind mounts with:
 
-
-`docker create --name <container-name> \`
-
-`-v /var/tmp:/var/tmp -v /run:/run -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored' \`
-
-`adrianparilli/virtnbdbackup-docker \`
-
-`/bin/bash`
-
+```
+docker create --name <container-name> \
+-v /var/tmp:/var/tmp -v /run:/run -v /mnt/backups:/mnt/backups -v /mnt/restored:/mnt/restored' \
+adrianparilli/virtnbdbackup-docker \
+/bin/bash
+```
 
 Just creating a new container (with custom name) with mount points set and ready to run in interactive mode. To start it and automatically enter into the internal shell, just type:
 
-
-`docker start -i <container-name>`
-
+```
+docker start -i <container-name>
+```
 
 And again, stopping it with the command `exit` from its shell.
 
