@@ -1,3 +1,7 @@
+# This Dockerfile is oudated
+
+The code has been merged into original virtnbdbackup's [source code](https://github.com/abbbi/virtnbdbackup), and all containerization updates are being commited there.
+
 # virtnbdbackup-docker
 
 *"Backup utility for libvirt, using the latest changed block tracking features. Create thin provisioned full and incremental backups of your kvm/qemu virtual machines."*
